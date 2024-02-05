@@ -1,0 +1,49 @@
+.counter_container {
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 2px 2px 10px #eee;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+}
+
+.counter_container h1 {
+  font-size: 24px;
+  color: lightblue;
+  font-weight: 600;
+}
+
+.count_container {
+  display: flex;
+  padding: 10px;
+}
+
+.count_container p {
+  color: red;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+.count_button button:nth-child(1) {
+  background-color: green;
+  border-radius: 50%;
+}
+
+.count_button button:nth-child(2) {
+  background-color: red;
+  border-radius: 50%;
+}
+
+.count_button button:nth-child(3) {
+  background-color: yellow;
+  border-radius: 50%;
+}
+/* HOMEWORK: Style the buttons */
+/* +1 bgColor: green */
+/* -1 bgColor: red */
+/* 0 bgColor: yellow */
+/* all buttons should be rounded */
