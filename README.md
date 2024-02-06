@@ -51,3 +51,8 @@ This installs the necessary dependencies for the project.
 ## State
 
 - State is a value that changes when application runs.
+
+## Homework for useEffect
+
+- API: https://jsonplaceholder.typicode.com/photos
+- Make a gallery for showing image in masonary style (we did in the css class.)
