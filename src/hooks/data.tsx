@@ -1,30 +1,81 @@
 import { useEffect, useState } from "react";
 
-export function Data() {
-  const [posts, setPosts] = useState([]);
+// Function based React lifecycle
+// 1. Component mount
+// 2. Component unmount
 
-  const fetchPosts = () => {
+// Class based react lifecycle
+// 1. ComponentDidMount
+// 2. ComponentDidUpdate
+// 3. ComponentWillUnmount
+
+export function Data() {
+  const [isPostVisible, setIsPostivisible] = useState(false);
+
+  const [posts, setPost] = useState<
+    { id: number; userId: number; body: string; title: string }[]
+  >([]);
+
+  const fetchPost = () => {
+    console.log("Fetch post is mounted:", isPostVisible);
     fetch("https://jsonplaceholder.typicode.com/posts", {
       method: "GET",
     })
       .then((response) => {
         const parsed = response.json();
         parsed.then((data) => {
-          console.log("Data from server", data);
-          setPosts(data);
+          // console.log("data from server", data);
+          setPost(data);
         });
       })
       .catch((error) => {
-        console.log("Error ", error);
+        console.log("error", error);
       });
+
+    return () => {
+      console.log("Fetch post is unmounted");
+    };
   };
 
-  useEffect(fetchPosts, []);
+  useEffect(fetchPost, [isPostVisible]);
+
+  const handlePostToggle = () => {
+    setIsPostivisible(!isPostVisible);
+  };
 
   return (
     <div>
-      <h1>Data loading from backend</h1>
-      <div>{JSON.stringify(posts)}</div>
+      <h1
+        style={{
+          margin: "16px 0",
+        }}
+      >
+        Posts
+      </h1>
+      <div>
+        <button onClick={handlePostToggle}>Toggle Posts</button>
+      </div>
+      {isPostVisible ? (
+        <div>
+          {posts.map((post) => {
+            return (
+              <div
+                key={post.id}
+                style={{
+                  border: "1px solid #ccc",
+                  padding: "16px",
+                  boxShadow: "1px 2px 3px #eee",
+                }}
+              >
+                <h2>{post.title}</h2>
+                <p>{[post.body]}</p>
+              </div>
+            );
+          })}{" "}
+        </div>
+      ) : (
+        <p>Post is not visible</p>
+      )}
     </div>
   );
 }
