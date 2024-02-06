@@ -16,6 +16,16 @@ export function Data() {
     { id: number; userId: number; body: string; title: string }[]
   >([]);
 
+  const [photos, setPhotos] = useState<
+    {
+      albumId: number;
+      id: number;
+      title: string;
+      thumbnailUrl: string;
+      url: string;
+    }[]
+  >([]);
+
   const fetchPost = () => {
     console.log("Fetch post is mounted:", isPostVisible);
     fetch("https://jsonplaceholder.typicode.com/posts", {
@@ -37,7 +47,24 @@ export function Data() {
     };
   };
 
+  const fetchPhoto = () => {
+    fetch("https://jsonplaceholder.typicode.com/photos", {
+      method: "GET",
+    })
+      .then((responseOfPhoto) => {
+        const parsedPhoto = responseOfPhoto.json();
+        parsedPhoto.then((data) => {
+          console.log("Photo from server ", data);
+          setPhotos(data);
+        });
+      })
+      .catch((error) => {
+        console.log("Error: ", error);
+      });
+  };
+
   useEffect(fetchPost, [isPostVisible]);
+  useEffect(fetchPhoto, [isPostVisible]);
 
   const handlePostToggle = () => {
     setIsPostivisible(!isPostVisible);
@@ -72,6 +99,34 @@ export function Data() {
               </div>
             );
           })}{" "}
+          {/* classname diyerw nth child ma function halne ani masonry hunxa */}
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(7, minmax(75px, 1fr))",
+              gap: "5px",
+            }}
+          >
+            {photos.map((photo) => {
+              return (
+                <div
+                  key={photo.id}
+                  style={{
+                    border: "1px solid black",
+                  }}
+                >
+                  <img
+                    src={photo.url}
+                    alt=""
+                    style={{
+                      height: "100%",
+                      width: "100%",
+                    }}
+                  />
+                </div>
+              );
+            })}
+          </div>
         </div>
       ) : (
         <p>Post is not visible</p>
