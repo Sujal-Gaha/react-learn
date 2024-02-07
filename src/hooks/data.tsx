@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-
+import "../test.css";
 // Function based React lifecycle
 // 1. Component mount
 // 2. Component unmount
@@ -100,29 +100,11 @@ export function Data() {
             );
           })}{" "}
           {/* classname diyerw nth child ma function halne ani masonry hunxa */}
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(7, minmax(75px, 1fr))",
-              gap: "5px",
-            }}
-          >
+          <div className="grid_container">
             {photos.map((photo) => {
               return (
-                <div
-                  key={photo.id}
-                  style={{
-                    border: "1px solid black",
-                  }}
-                >
-                  <img
-                    src={photo.url}
-                    alt=""
-                    style={{
-                      height: "100%",
-                      width: "100%",
-                    }}
-                  />
+                <div key={photo.id} className="grid_img">
+                  <img src={photo.url} alt="" />
                 </div>
               );
             })}
