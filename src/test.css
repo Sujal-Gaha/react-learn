@@ -4,6 +4,10 @@
     gap: 5px;
 }
 
+.grid_container div:nth-child(2n+1) {
+    grid-row: span 2;
+}
+
 .grid_img {
     border: 1px solid black;
 }
@@ -11,8 +15,4 @@
 .grid_img img {
     height: 100%;
     width: 100%;
-}
-
-.grid_container div:nth-child(2n+1) {
-    grid-row: span 2;
 }
