@@ -99,7 +99,6 @@ export function Data() {
               </div>
             );
           })}{" "}
-          {/* classname diyerw nth child ma function halne ani masonry hunxa */}
           <div className="grid_container">
             {photos.map((photo) => {
               return (
