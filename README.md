@@ -56,3 +56,26 @@ This installs the necessary dependencies for the project.
 
 - API: https://jsonplaceholder.typicode.com/photos
 - Make a gallery for showing image in masonary style (we did in the css class.)
+
+## REST API
+
+- Rule for making backend api
+- Methods:
+
+  - GET: to get the resource
+  - POST: to add/create resource
+  - PUT: to update resource
+  - PATCH: to update a field of a resource
+  - DELETE: to remove resource
+
+- Convention of path
+  - Resource name of the path should always be plural. (e.g. posts, comments, categories, users)
+  - e.g. i want to get the comments of post number 10 (use param)
+    "/posts/:postId/comments"
+  - search/filter should be done using query. i want to get comment number 25 and status is unapproved.
+    "/posts/:postId/comments/:commentId?status=unapproved"
+
+url: https://jsonplaceholder.typicode.com/posts/:postId?userId=2&status=PUBLISHED
+path: /posts
+param: :postId
+query: ?userId=2
