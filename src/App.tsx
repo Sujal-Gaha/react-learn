@@ -1,34 +1,64 @@
 import "./App.css";
-import { Fragment } from "react";
+import { Navbar } from "./components/Navbar";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Outlet,
+  Link,
+} from "react-router-dom";
+import { posts } from "./data/posts";
+import { PostDetail } from "./components/PostDetail";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: (
+      <div>
+        <Navbar />
+        <Outlet />
+      </div>
+    ),
+    children: [
+      {
+        path: "/",
+        element: (
+          <div>
+            <h2>Home Page</h2>
+          </div>
+        ),
+      },
+      {
+        path: "/posts",
+        element: (
+          <div>
+            <h2>show list of posts</h2>
+            <ul>
+              {posts.map((post) => {
+                return (
+                  <li key={post.id}>
+                    <Link to={`/posts/${post.id}`}>{post.title}</Link>
+                  </li>
+                );
+              })}
+            </ul>
+
+            <div className="post-detail-container">
+              <Outlet />
+            </div>
+          </div>
+        ),
+      },
+    ],
+  },
+
+  {
+    path: "/posts/:postId",
+    element: <PostDetail />,
+  },
+]);
 
 function App() {
-  const age = 10;
-  const studentAge = `${age}`;
-
-  const students = [];
-
-  return (
-    <Fragment>
-      <div className="app-1">
-        <p>This is my first app.</p>
-      </div>
-      <div className="app-2">
-        <p>{studentAge}</p>
-
-        <p>{students.length ? "hello students" : "no students"} </p>
-      </div>
-
-      <label htmlFor="">
-        <input
-          type="text"
-          style={{
-            backgroundColor: "red",
-            color: "blue",
-          }}
-        />
-      </label>
-    </Fragment>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;

@@ -1,41 +1,34 @@
 import { useEffect, useState } from "react";
-import "../test.css";
+
 // Function based React lifecycle
 // 1. Component mount
-// 2. Component unmount
+// 2. Component Unmount
 
 // Class based react lifecycle
-// 1. ComponentDidMount
-// 2. ComponentDidUpdate
-// 3. ComponentWillUnmount
+// ComponentDidMount
+// ComponentDidUpdate
+// ComponentWillUnmount
+
+// file a -> a* => 5kb memory address abc123
+// delete a* = null
 
 export function Data() {
-  const [isPostVisible, setIsPostivisible] = useState(false);
+  const [isPostVisible, setIsPostVisible] = useState(false);
 
-  const [posts, setPost] = useState<
+  const [posts, setPosts] = useState<
     { id: number; userId: number; body: string; title: string }[]
   >([]);
 
-  const [photos, setPhotos] = useState<
-    {
-      albumId: number;
-      id: number;
-      title: string;
-      thumbnailUrl: string;
-      url: string;
-    }[]
-  >([]);
-
-  const fetchPost = () => {
-    console.log("Fetch post is mounted:", isPostVisible);
+  const fetchPosts = () => {
+    console.log("fetch posts is mounted", isPostVisible);
     fetch("https://jsonplaceholder.typicode.com/posts", {
+      // get, post, patch, put, delete
       method: "GET",
     })
       .then((response) => {
         const parsed = response.json();
         parsed.then((data) => {
-          // console.log("data from server", data);
-          setPost(data);
+          setPosts(data);
         });
       })
       .catch((error) => {
@@ -43,31 +36,14 @@ export function Data() {
       });
 
     return () => {
-      console.log("Fetch post is unmounted");
+      console.log("fetchPosts is unmounted.");
     };
   };
 
-  const fetchPhoto = () => {
-    fetch("https://jsonplaceholder.typicode.com/photos", {
-      method: "GET",
-    })
-      .then((responseOfPhoto) => {
-        const parsedPhoto = responseOfPhoto.json();
-        parsedPhoto.then((data) => {
-          console.log("Photo from server ", data);
-          setPhotos(data);
-        });
-      })
-      .catch((error) => {
-        console.log("Error: ", error);
-      });
-  };
-
-  useEffect(fetchPost, [isPostVisible]);
-  useEffect(fetchPhoto, [isPostVisible]);
+  useEffect(fetchPosts, [isPostVisible]);
 
   const handlePostToggle = () => {
-    setIsPostivisible(!isPostVisible);
+    setIsPostVisible(!isPostVisible);
   };
 
   return (
@@ -79,9 +55,11 @@ export function Data() {
       >
         Posts
       </h1>
+
       <div>
         <button onClick={handlePostToggle}>Toggle Posts</button>
       </div>
+
       {isPostVisible ? (
         <div>
           {posts.map((post) => {
@@ -95,22 +73,13 @@ export function Data() {
                 }}
               >
                 <h2>{post.title}</h2>
-                <p>{[post.body]}</p>
+                <p>{post.body}</p>
               </div>
             );
-          })}{" "}
-          <div className="grid_container">
-            {photos.map((photo) => {
-              return (
-                <div key={photo.id} className="grid_img">
-                  <img src={photo.url} alt="" />
-                </div>
-              );
-            })}
-          </div>
+          })}
         </div>
       ) : (
-        <p>Post is not visible</p>
+        <p>Post is not visible.</p>
       )}
     </div>
   );
