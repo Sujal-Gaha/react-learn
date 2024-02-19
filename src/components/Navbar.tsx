@@ -1,31 +1,29 @@
-import { Link } from "react-router-dom";
-
 export function Navbar() {
   return (
     <div
       style={{
         display: "flex",
-        gap: "20px",
+        justifyContent: "space-between",
+        marginBottom: "10px",
       }}
     >
-      <Link
+      <img
+        src="../../public/images/SkillPrompt-logo.png"
+        alt="Logo"
         style={{
-          border: "1px solid red",
-          padding: "5px",
+          width: "250px",
         }}
-        to="/"
-      >
-        Home
-      </Link>
-      <Link
-        style={{
-          border: "1px solid red",
-          padding: "5px",
-        }}
-        to="/posts"
-      >
-        Posts
-      </Link>
+      />
+      <div style={{}}>
+        <input
+          style={{
+            padding: "5px",
+          }}
+          type="text"
+          name="search"
+          placeholder="search posts"
+        />
+      </div>
     </div>
   );
 }
