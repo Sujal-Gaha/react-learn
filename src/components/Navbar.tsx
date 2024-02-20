@@ -8,22 +8,22 @@ export function Navbar() {
       }}
     >
       <img
-        src="../../public/images/SkillPrompt-logo.png"
-        alt="Logo"
         style={{
-          width: "250px",
+          width: "150px",
         }}
+        src="../../public/images/SkillPrompt-logo.png"
+        alt="logo"
       />
-      <div style={{}}>
-        <input
-          style={{
-            padding: "5px",
-          }}
-          type="text"
-          name="search"
-          placeholder="search posts"
-        />
-      </div>
+
+      {/* input box for search */}
+      <input
+        style={{
+          padding: "5px",
+        }}
+        placeholder="search posts"
+        type="text"
+        name="search"
+      />
     </div>
   );
 }
