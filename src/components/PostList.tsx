@@ -24,7 +24,14 @@ export function PostList() {
     >
       {posts.map((post) => {
         return (
-          <PostCard key={post.id} title={post.title} description={post.body} />
+          <PostCard
+            key={post.id}
+            postId={post.id}
+            title={post.title}
+            description={post.body}
+            posts={posts}
+            setPosts={setPosts}
+          />
         );
       })}
     </div>
