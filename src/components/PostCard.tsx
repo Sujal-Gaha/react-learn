@@ -12,11 +12,15 @@ export function PostCard(props: {
 }) {
   const [isDeleting, setIsDeleting] = useState(false);
 
+  const [failedDelete, setFailedDelete] = useState("");
+
   // TODO: make an state for error message
 
   const handlePostDelete = async (postId: number) => {
     // set the isDeleting state to true
     setIsDeleting(true);
+
+    setFailedDelete("");
 
     // make api call to the backend to delete the post
     try {
@@ -29,6 +33,7 @@ export function PostCard(props: {
       console.log("Error when deleting the post with id:", postId, error);
 
       // TODO: set the message that is shown to the user
+      setFailedDelete("Failed to delete the post");
     }
 
     // set the isDeleting state to false
@@ -58,9 +63,8 @@ export function PostCard(props: {
       >
         {props.description}
       </p>
-
       {isDeleting ? (
-        <p>Loading...</p>
+        <p style={{ color: "blue" }}>Deleting...</p>
       ) : (
         <button
           onClick={() => {
@@ -71,9 +75,10 @@ export function PostCard(props: {
           Delete
         </button>
       )}
-
+      {failedDelete ? (
+        <p style={{ color: "red" }}>Failed to delete the post!!!</p>
+      ) : null}
       {/* TODO: show the error message here and make it red */}
-      <p>Show error message here</p>
     </div>
   );
 }
