@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { MdDelete } from "react-icons/md";
 import { deletePost } from "../data/delete-post";
 import { TPost } from "../types";
+import { Link } from "react-router-dom";
 
 export function PostCard(props: {
   title: string;
@@ -41,6 +42,10 @@ export function PostCard(props: {
     setIsDeleting(false);
   };
 
+  // const handleShowPage = (postId: number) => {
+  //   ShowPost(postId);
+  // };
+
   return (
     <div
       style={{
@@ -50,13 +55,15 @@ export function PostCard(props: {
         margin: "10px 0",
       }}
     >
-      <h2
-        style={{
-          color: "#aaa",
-        }}
-      >
-        {props.title}
-      </h2>
+      <Link to={`/posts/${props.postId}`} style={{ textDecoration: "none" }}>
+        <h2
+          style={{
+            color: "#aaa",
+          }}
+        >
+          {props.title}
+        </h2>
+      </Link>
       <p
         style={{
           color: "#000",

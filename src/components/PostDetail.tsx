@@ -1,5 +1,7 @@
-import { posts } from "../data/posts.ts";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { TPost } from "../types";
+import { getPost } from "../data/posts";
 
 export function PostDetail() {
   const params = useParams();
@@ -9,11 +11,32 @@ export function PostDetail() {
   if (postId) {
     return (
       <div>
-        <p>id: {posts.find((post) => post.id === postId)?.id}</p>
-        <p>Title: {posts.find((post) => post.id === postId)?.title}</p>
+        <PostData postId={postId} />
       </div>
     );
   }
 
   return <div>Post id not found</div>;
+}
+
+function PostData(props: { postId: number }) {
+  const [post, setPost] = useState<TPost | null>(null);
+
+  useEffect(() => {
+    async function getPostFromServer() {
+      console.log("props", props);
+      const post = await getPost(props.postId);
+      setPost(post);
+    }
+
+    getPostFromServer();
+  }, []);
+
+  return (
+    <div>
+      <p>Id: {post?.id}</p>
+      <p>Title: {post?.title}</p>
+      <p>Body: {post?.body}</p>
+    </div>
+  );
 }
