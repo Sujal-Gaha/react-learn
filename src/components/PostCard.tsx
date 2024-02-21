@@ -20,6 +20,7 @@ export function PostCard(props: {
     // set the isDeleting state to true
     setIsDeleting(true);
 
+    // set the failedDelete state to empty string
     setFailedDelete("");
 
     // make api call to the backend to delete the post
