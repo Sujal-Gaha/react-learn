@@ -30,13 +30,13 @@ const router = createBrowserRouter([
           </div>
         ),
       },
+      {
+        path: "/posts/:postId",
+        element: <PostDetail />,
+      },
     ],
   },
 
-  {
-    path: "/posts/:postId",
-    element: <PostDetail />,
-  },
 ]);
 
 function App() {
