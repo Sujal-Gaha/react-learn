@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
+import { FiTrash } from "react-icons/fi";
 
 type TTodoITem = {
-    userId: number;
-    id: number;
-    title: string;
-    completed: boolean;
-}
+  userId: number;
+  id: number;
+  title: string;
+  completed: boolean;
+};
 
 export function TodosList() {
   const [todos, setTodos] = useState<TTodoITem[]>([]);
+
   useEffect(() => {
     fetch("https://jsonplaceholder.typicode.com/todos", {
       method: "GET",
@@ -28,6 +30,14 @@ export function TodosList() {
         console.log("Error ", error);
       });
   }, []);
+
+  const handleDeleteTodo = (id: number) => {
+    console.log("Deleted the Todo with id:", id);
+
+    const filteredTodos = todos.filter((todo) => todo.id !== id);
+    setTodos(filteredTodos);
+  };
+
   return (
     <div>
       <h2>List of Todos</h2>
@@ -38,6 +48,11 @@ export function TodosList() {
             <li key={index}>
               id: {todo.id}, userId: {todo.userId}, title: {todo.title},
               completed: {todo.completed}
+              <FiTrash
+                onClick={() => {
+                  handleDeleteTodo(todo.id);
+                }}
+              />
             </li>
           );
         })}
