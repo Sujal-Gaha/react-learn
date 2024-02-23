@@ -60,7 +60,8 @@ export function TodosList() {
         {todos.map((todo, index) => {
           return (
             <li key={index}>
-              id: {todo.id}, title: {todo.title}, completed: {todo.completed? ("True"): ("False")}
+              id: {todo.id}, title: {todo.title}, completed:{" "}
+              {todo.completed ? "True" : "False"}
               <FiTrash
                 onClick={() => {
                   handleDeleteTodo(todo.id);
