@@ -43,6 +43,13 @@ export function TodosList() {
     setTodos(filteredTodos);
   };
 
+  const handleEditTodo = (id: number) => {
+    console.log("Edit", id);
+
+    setIsModalOpen(true);
+    setSelectedId(id);
+  };
+
   const selectedTodo = todos.find((todo) => todo.id === selectedId);
 
   return (
@@ -61,11 +68,7 @@ export function TodosList() {
               />
               <MdEdit
                 onClick={() => {
-                  console.log("Edit:", todo.id);
-                  console.log("Title:", todo.title);
-                  console.log("Completed:", todo.completed);
-                  setIsModalOpen(true);
-                  setSelectedId(todo.id);
+                  handleEditTodo(todo.id);
                 }}
               />
             </li>
