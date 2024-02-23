@@ -77,19 +77,56 @@ export function TodosList() {
 
       {isModalOpen ? (
         <div className="modal-todo">
-          <h1>Todo modal (id: {selectedTodo?.id})</h1>
-
+          <h1
+            style={{
+              padding: "20px",
+              color: "darkmagenta",
+            }}
+          >
+            Todo modal (id: {selectedTodo?.id})
+          </h1>
+          <br />
+          <br />
           {/* form */}
           {/* title field */}
           {/* toggle for completed field */}
           {/* button to update the data */}
-          <button
-            onClick={() => {
-              setIsModalOpen(false);
+          <form action="">
+            <div>
+              <label htmlFor="title" style={{ paddingRight: "40px" }}>
+                Title:
+              </label>
+              <input
+                type="text"
+                id="title"
+                style={{
+                  width: "80%",
+                }}
+              />
+            </div>
+            <br />
+            <div>
+              <label htmlFor="comment">Completed:</label>
+              <input type="checkbox" />
+            </div>
+          </form>
+          <hr />
+          <br />
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-evenly",
             }}
           >
-            Close Modal
-          </button>
+            <button>Update</button>
+            <button
+              onClick={() => {
+                setIsModalOpen(false);
+              }}
+            >
+              Close Modal
+            </button>
+          </div>
         </div>
       ) : null}
     </div>

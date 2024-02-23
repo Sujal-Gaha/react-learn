@@ -18,4 +18,17 @@ body {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+  z-index: 10;
+  background-color: lightgray;
+  border: 2px solid gray;
+  border-radius: 3px;
+  height: 350px;
+  width: 800px;
+  text-align: center;
+  padding: 20px 100px 50px;
+}
+
+form {
+  text-align: left;
+  padding-bottom: 80px;
 }
