@@ -104,28 +104,28 @@ export function TodosList() {
               />
             </div>
             <br />
-            <div>
+            <div style={{ paddingBottom: "80px" }}>
               <label htmlFor="comment">Completed:</label>
-              <input type="checkbox" defaultChecked={selectedTodo?.completed}/>
+              <input type="checkbox" defaultChecked={selectedTodo?.completed} />
             </div>
-          </form>
-          <hr />
-          <br />
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-evenly",
-            }}
-          >
-            <button>Update</button>
-            <button
-              onClick={() => {
-                setIsModalOpen(false);
+            <hr />
+            <br />
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-evenly",
               }}
             >
-              Close Modal
-            </button>
-          </div>
+              <button type="submit">Update</button>
+              <button
+                onClick={() => {
+                  setIsModalOpen(false);
+                }}
+              >
+                Close Modal
+              </button>
+            </div>
+          </form>
         </div>
       ) : null}
     </div>
