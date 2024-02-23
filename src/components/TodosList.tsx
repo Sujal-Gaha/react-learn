@@ -37,11 +37,7 @@ export function TodosList() {
   }, []);
 
   const handleDeleteTodo = (id: number) => {
-    // delete the id 5
     console.log("delete", id);
-
-    // TODO: backend integration
-    // because there is no api
 
     const filteredTodos = todos.filter((todo) => todo.id !== id);
     setTodos(filteredTodos);
@@ -65,7 +61,9 @@ export function TodosList() {
               />
               <MdEdit
                 onClick={() => {
-                  console.log("Edit", todo.id);
+                  console.log("Edit:", todo.id);
+                  console.log("Title:", todo.title);
+                  console.log("Completed:", todo.completed);
                   setIsModalOpen(true);
                   setSelectedId(todo.id);
                 }}
@@ -102,12 +100,17 @@ export function TodosList() {
                 style={{
                   width: "80%",
                 }}
+                defaultValue={selectedTodo?.title}
               />
             </div>
             <br />
             <div>
               <label htmlFor="comment">Completed:</label>
-              <input type="checkbox" />
+              {selectedTodo?.completed ? (
+                <input type="checkbox" defaultChecked />
+              ) : (
+                <input type="checkbox" />
+              )}
             </div>
           </form>
           <hr />
