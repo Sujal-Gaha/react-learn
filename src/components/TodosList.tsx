@@ -106,11 +106,7 @@ export function TodosList() {
             <br />
             <div>
               <label htmlFor="comment">Completed:</label>
-              {selectedTodo?.completed ? (
-                <input type="checkbox" defaultChecked />
-              ) : (
-                <input type="checkbox" />
-              )}
+              <input type="checkbox" defaultChecked={selectedTodo?.completed}/>
             </div>
           </form>
           <hr />
