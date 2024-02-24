@@ -53,18 +53,18 @@ export function TodosList() {
   const handleUpdateTodo = (
     previousUserId: number,
     previousId: number,
-    title: string,
-    completed: boolean
+    newTitle: string,
+    newCompleted: boolean
   ) => {
     const tempIndex = todos.findIndex((todo) => todo.id === selectedId);
     todos.splice(tempIndex, 1, {
       userId: previousUserId,
       id: previousId,
-      title: title,
-      completed: completed,
+      title: newTitle,
+      completed: newCompleted,
     });
 
-    console.log(tempIndex, title, completed);
+    console.log(tempIndex, newTitle, newCompleted);
     setTodos(todos);
     setIsModalOpen(false);
     console.log(todos);
