@@ -50,6 +50,26 @@ export function TodosList() {
     setSelectedId(id);
   };
 
+  const handleUpdateTodo = (
+    previousUserId: number,
+    previousId: number,
+    title: string,
+    completed: boolean
+  ) => {
+    const tempIndex = todos.findIndex((todo) => todo.id === selectedId);
+    todos.splice(tempIndex, 1, {
+      userId: previousUserId,
+      id: previousId,
+      title: title,
+      completed: completed,
+    });
+
+    console.log(tempIndex, title, completed);
+    setTodos(todos);
+    setIsModalOpen(false);
+    console.log(todos);
+  };
+
   const selectedTodo = todos.find((todo) => todo.id === selectedId);
 
   return (
@@ -95,12 +115,16 @@ export function TodosList() {
           {/* button to update the data */}
           <form
             action=""
-            onSubmit={(e) => {
-              e.preventDefault();
-              const updatedTitle = e.target.title.value;
-              const updatedCompleted = e.target.completed.defaultChecked;
-              console.log(updatedTitle);
-              console.log(updatedCompleted);
+            onSubmit={(event) => {
+              event.preventDefault();
+              const updatedTitle = event.target.title.value;
+              const updatedCompleted = event.target.completed.checked;
+              handleUpdateTodo(
+                selectedTodo.userId,
+                selectedTodo.id,
+                updatedTitle,
+                updatedCompleted
+              );
             }}
           >
             <div>
