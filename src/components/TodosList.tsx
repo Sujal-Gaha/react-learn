@@ -93,7 +93,16 @@ export function TodosList() {
           {/* title field */}
           {/* toggle for completed field */}
           {/* button to update the data */}
-          <form action="">
+          <form
+            action=""
+            onSubmit={(e) => {
+              e.preventDefault();
+              const updatedTitle = e.target.title.value;
+              const updatedCompleted = e.target.completed.defaultChecked;
+              console.log(updatedTitle);
+              console.log(updatedCompleted);
+            }}
+          >
             <div>
               <label htmlFor="title" style={{ paddingRight: "40px" }}>
                 Title:
@@ -109,8 +118,12 @@ export function TodosList() {
             </div>
             <br />
             <div style={{ paddingBottom: "80px" }}>
-              <label htmlFor="comment">Completed:</label>
-              <input type="checkbox" defaultChecked={selectedTodo?.completed} />
+              <label htmlFor="completed">Completed:</label>
+              <input
+                type="checkbox"
+                id="completed"
+                defaultChecked={selectedTodo?.completed}
+              />
             </div>
             <hr />
             <br />
