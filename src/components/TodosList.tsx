@@ -14,7 +14,7 @@ export function TodosList() {
   const [todos, setTodos] = useState<TTodoItem[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [selectedTodo, setSelectedTodo] = useState<TTodoItem | null>(null);
 
   useEffect(() => {
     fetch("https://jsonplaceholder.typicode.com/todos", {
@@ -43,34 +43,72 @@ export function TodosList() {
     setTodos(filteredTodos);
   };
 
-  const handleEditTodo = (id: number) => {
-    console.log("Edit", id);
-
-    setIsModalOpen(true);
-    setSelectedId(id);
-  };
-
-  const handleUpdateTodo = (
-    previousUserId: number,
-    previousId: number,
-    newTitle: string,
-    newCompleted: boolean
-  ) => {
-    const tempIndex = todos.findIndex((todo) => todo.id === selectedId);
-    todos.splice(tempIndex, 1, {
-      userId: previousUserId,
-      id: previousId,
-      title: newTitle,
-      completed: newCompleted,
+  const handleTitleChange = (value: string) => {
+    setSelectedTodo((prevValue) => {
+      if (prevValue) {
+        return {
+          // id: prevValue.id,
+          // completed: prevValue.completed,
+          // userId: prevValue.userId,
+          ...prevValue,
+          title: value,
+        };
+      } else {
+        return prevValue;
+      }
     });
-
-    console.log(tempIndex, newTitle, newCompleted);
-    setTodos(todos);
-    setIsModalOpen(false);
-    console.log(todos);
   };
 
-  const selectedTodo = todos.find((todo) => todo.id === selectedId);
+  const handleCompletedChange = (checked: boolean) => {
+    setSelectedTodo((prevValue) => {
+      if (prevValue) {
+        return {
+          id: prevValue.id,
+          title: prevValue.title,
+          completed: checked,
+          userId: prevValue.userId,
+        };
+      } else {
+        return prevValue;
+      }
+    });
+  };
+
+  const handleFormSubmission = () => {
+    // state
+    // backend request
+    const updatedTodos = todos.map((todo) => {
+      if (todo.id === selectedTodo?.id) {
+        return selectedTodo;
+      } else {
+        return todo;
+      }
+    });
+    setTodos(updatedTodos);
+    setIsModalOpen(false);
+
+    // form data
+    // const formData = new FormData(target);
+    // const title = formData.get("title") as string;
+    // const completed = formData.get("completed") as string;
+    // const id = formData.get("id") as string;
+    // const userId = formData.get("userId") as string;
+
+    // const updatedTodos = todos.map((todo) => {
+    //   if (todo.id === parseInt(id)) {
+    //     return {
+    //       id: parseInt(id),
+    //       title: title,
+    //       completed: completed === "on",
+    //       userId: parseInt(userId),
+    //     };
+    //   } else {
+    //     return todo;
+    //   }
+    // });
+    // setTodos(updatedTodos);
+    // setIsModalOpen(false);
+  };
 
   return (
     <div className={styles.todos_list_container}>
@@ -89,7 +127,14 @@ export function TodosList() {
               />
               <MdEdit
                 onClick={() => {
-                  handleEditTodo(todo.id);
+                  console.log("Edit", todo.id);
+                  setIsModalOpen(true);
+                  setSelectedTodo({
+                    id: todo.id,
+                    title: todo.title,
+                    completed: todo.completed,
+                    userId: todo.userId,
+                  });
                 }}
               />
             </li>
@@ -109,44 +154,45 @@ export function TodosList() {
           </h1>
           <br />
           <br />
-          {/* form */}
-          {/* title field */}
-          {/* toggle for completed field */}
-          {/* button to update the data */}
           <form
             action=""
             onSubmit={(event) => {
               event.preventDefault();
-              const updatedTitle = event.target.title.value;
-              const updatedCompleted = event.target.completed.checked;
-              handleUpdateTodo(
-                selectedTodo.userId,
-                selectedTodo.id,
-                updatedTitle,
-                updatedCompleted
-              );
+              handleFormSubmission();
             }}
           >
+            <input type="hidden" name="id" value={selectedTodo?.id} />
+            <input type="hidden" name="userId" value={selectedTodo?.userId} />
             <div>
               <label htmlFor="title" style={{ paddingRight: "40px" }}>
                 Title:
               </label>
               <input
+                name="title"
                 type="text"
                 id="title"
+                value={selectedTodo?.title}
                 style={{
                   width: "80%",
                 }}
-                defaultValue={selectedTodo?.title}
+                onChange={(event) => {
+                  const value = event.target.value;
+                  handleTitleChange(value);
+                }}
               />
             </div>
             <br />
             <div style={{ paddingBottom: "80px" }}>
               <label htmlFor="completed">Completed:</label>
               <input
+                name="completed"
                 type="checkbox"
                 id="completed"
-                defaultChecked={selectedTodo?.completed}
+                checked={selectedTodo?.completed}
+                onChange={(event) => {
+                  const isChecked = event.target.checked;
+                  handleCompletedChange(isChecked);
+                }}
               />
             </div>
             <hr />
@@ -157,7 +203,7 @@ export function TodosList() {
                 justifyContent: "space-evenly",
               }}
             >
-              <button type="submit">Update</button>
+              <button>Update</button>
               <button
                 onClick={() => {
                   setIsModalOpen(false);
