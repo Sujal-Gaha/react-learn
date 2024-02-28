@@ -85,10 +85,15 @@ export function PostList() {
 
         <div>
           <label htmlFor="per_page">Per Page</label>
-          <select name="per_page" id="per_page" value={perPage} onChange={(event) => {
-            setPerPage(Number(event.target.value));
-            setPage(1);
-          }}>
+          <select
+            name="per_page"
+            id="per_page"
+            value={perPage}
+            onChange={(event) => {
+              setPerPage(Number(event.target.value));
+              setPage(1);
+            }}
+          >
             <option value={5}>5</option>
             <option value={10}>10</option>
             <option value={20}>20</option>
