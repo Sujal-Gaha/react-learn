@@ -2,20 +2,16 @@ import { useEffect, useState } from "react";
 import { PostCard } from "./PostCard";
 import { TPost } from "../types";
 import { fetchPosts } from "../data/fetch-posts";
-import { GlobalTextPostList } from "./GlobalTextPostList";  
-
-const DEFAULT_NUMBER_OF_POSTS = 5;
+import { GlobalTextPostList } from "./GlobalTextPostList";
 
 export function PostList() {
+  const [perPage, setPerPage] = useState(5);
   const [posts, setPosts] = useState<TPost[]>([]);
 
   const [numberOfPostsFromBackend, setNumberOfPostsFromBackend] = useState(0);
-
   const [page, setPage] = useState(1);
 
-  const numberOfPages = Math.ceil(
-    numberOfPostsFromBackend / DEFAULT_NUMBER_OF_POSTS
-  );
+  const numberOfPages = Math.ceil(numberOfPostsFromBackend / perPage);
 
   const pages = Array.from({ length: numberOfPages }, (_, index) => {
     return index + 1;
@@ -26,43 +22,28 @@ export function PostList() {
       const posts = await fetchPosts();
       setNumberOfPostsFromBackend(posts.length);
 
-      // formula
-      //  DEFAULT_NUMBER_OF_POSTS  * (page - 1) : DEFAULT_NUMBER_OF_POSTS * page
-      // page: 1
-      // 0 + 0
-
-      // page: 2
-      // 1+:9
-      //
-      // page: 3
-      // 2:14
-
-      // 2 => 5:9
-      // 3 => 10:14
-      const startIndex = DEFAULT_NUMBER_OF_POSTS * (page - 1);
-      const endIndex = DEFAULT_NUMBER_OF_POSTS * page;
+      const startIndex = perPage * (page - 1);
+      const endIndex = perPage * page;
 
       const slicedPosts = posts.slice(startIndex, endIndex);
       setPosts(slicedPosts);
     }
 
     getPosts();
-  }, []);
+  }, [page, perPage]);
 
   const handlePageClicked = async (pageNumber: number) => {
-    setPage(pageNumber);
     const posts = await fetchPosts();
     setNumberOfPostsFromBackend(posts.length);
 
-    const startIndex = DEFAULT_NUMBER_OF_POSTS * (pageNumber - 1);
-    const endIndex = DEFAULT_NUMBER_OF_POSTS * pageNumber;
+    const startIndex = perPage * (pageNumber - 1);
+    const endIndex = perPage * pageNumber;
 
     const slicedPosts = posts.slice(startIndex, endIndex);
 
+    setPage(pageNumber);
     setPosts(slicedPosts);
   };
-
-  console.log("page", page);
 
   return (
     <div
@@ -104,10 +85,13 @@ export function PostList() {
 
         <div>
           <label htmlFor="per_page">Per Page</label>
-          <select name="per_page" id="per_page">
-            <option>5</option>
-            <option>10</option>
-            <option>20</option>
+          <select name="per_page" id="per_page" value={perPage} onChange={(event) => {
+            setPerPage(Number(event.target.value));
+            setPage(1);
+          }}>
+            <option value={5}>5</option>
+            <option value={10}>10</option>
+            <option value={20}>20</option>
           </select>
         </div>
       </div>
