@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import { PostDetail } from "./components/PostDetail";
 import { PostList } from "./components/PostList";
 import { TodosList } from "./components/TodosList";
+import { PostPaginationProvider } from "./store/pagination-posts";
 
 const router = createBrowserRouter([
   {
@@ -27,7 +28,9 @@ const router = createBrowserRouter([
         path: "/posts",
         element: (
           <div>
-            <PostList />
+            <PostPaginationProvider>
+              <PostList />
+            </PostPaginationProvider>
           </div>
         ),
       },
