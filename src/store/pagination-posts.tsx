@@ -1,17 +1,24 @@
 // useContext
 
-import { createContext, useContext } from "react";
+import { createContext, useContext, useState } from "react";
+import { TPost } from "../types";
 
 type TPostPaginationCtx = {
+  posts: TPost[];
+  setPosts: React.Dispatch<React.SetStateAction<TPost[]>>;
   page: number;
-  globalText: string;
-  sayHello: null | Function;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
+  perPage: number;
+  setPerPage: React.Dispatch<React.SetStateAction<number>>;
 };
 // createContext
 const PostPaginationCtx = createContext<TPostPaginationCtx>({
+  posts: [],
+  setPosts: () => {},
   page: 1,
-  globalText: "hello world",
-  sayHello: null,
+  setPage: () => {},
+  perPage: 5,
+  setPerPage: () => {},
 });
 
 // Provider component
@@ -20,14 +27,19 @@ export function PostPaginationProvider({
 }: {
   children: React.ReactNode;
 }) {
+  const [posts, setPosts] = useState<TPost[]>([]);
+  const [page, setPage] = useState(1);
+  const [perPage, setPerPage] = useState(5);
+
   return (
     <PostPaginationCtx.Provider
       value={{
-        page: 1,
-        globalText: "Post list application",
-        sayHello: () => {
-          console.log("hello world");
-        },
+        posts,
+        setPosts,
+        page,
+        setPage,
+        perPage,
+        setPerPage,
       }}
     >
       {children}
