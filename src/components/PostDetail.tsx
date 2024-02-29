@@ -58,7 +58,7 @@ function Post({
     }
   };
 
-  const handleDeleteCommentClicked = (commentId: number) => {
+  const handleCommentDelete = (commentId: number) => {
     const filteredComments = comments.filter(
       (comment) => comment.id !== commentId
     );
@@ -161,7 +161,7 @@ function Post({
                     <FaEdit />
                     <MdDelete
                       onClick={() => {
-                        handleDeleteCommentClicked(comment.id);
+                        handleCommentDelete(comment.id);
                       }}
                     />
                   </div>
