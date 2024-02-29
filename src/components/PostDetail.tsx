@@ -1,36 +1,48 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { TPost } from "../types";
-import { getPost } from "../data/posts";
+import { getPostById } from "../data/fetch-post-by-id";
+import { TComment, TPost } from "../types";
+import { fetchComments } from "../data/fetch-comments";
 
 export function PostDetail() {
   const params = useParams();
-
   const postId = parseInt(params.postId || "");
-
-  if (postId) {
-    return (
-      <div>
-        <PostData postId={postId} />
-      </div>
-    );
-  }
-
-  return <div>Post id not found</div>;
-}
-
-function PostData(props: { postId: number }) {
   const [post, setPost] = useState<TPost | null>(null);
 
-  useEffect(() => {
-    async function getPostFromServer() {
-      console.log("props", props);
-      const post = await getPost(props.postId);
-      setPost(post);
-    }
+  if (postId) {
+    return <Post postId={postId} post={post} setPost={setPost} />;
+  }
 
-    getPostFromServer();
-  }, []);
+  return <div>Post id not found</ div>;
+}
+
+function Post({
+  post,
+  setPost,
+  postId,
+}: {
+  post: TPost | null;
+  setPost: React.Dispatch<React.SetStateAction<TPost | null>>;
+  postId: number;
+}) {
+  const [comments, setComments] = useState<TComment[]>([]);
+
+  useEffect(() => {
+    async function fetchPost() {
+      const result = await getPostById(postId);
+      // ui logic here
+      setPost(result);
+    }
+    fetchPost();
+  }, [postId, setPost]);
+
+  useEffect(() => {
+    async function fetchCommentsFn() {
+      const comments = await fetchComments(postId);
+      setComments(comments);
+    }
+    fetchCommentsFn();
+  }, [postId]);
 
   return (
     <div
@@ -86,33 +98,18 @@ function PostData(props: { postId: number }) {
           margin: "20px 25px 25px",
         }}
       />
-      <label
-        htmlFor="comment"
-        style={{
-          margin: "20px",
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
-        <textarea
-          name="comment"
-          id="comment"
-          cols={60}
-          rows={2}
-          placeholder="Add a comment..."
-          style={{
-            resize: "none",
-            boxSizing: "border-box",
-            width: "45%",
-          }}
-        ></textarea>
-        <button style={{ width: "80px", height: "22px", alignSelf: "end" }}>
-          Comment
-        </button>
-        <button style={{ width: "80px", height: "22px", alignSelf: "end" }}>
-          Cancel
-        </button>
-      </label>
+      <div>
+        <h3>Comments</h3>
+
+        {comments.map((comment) => {
+          return (
+            <div key={comment.id}>
+              <h4>{comment.email}</h4>
+              <p>{comment.body}</p>
+            </div>
+          );
+        })}
+    </div>
     </div>
   );
 }
