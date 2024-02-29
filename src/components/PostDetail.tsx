@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import { getPostById } from "../data/fetch-post-by-id";
 import { TComment, TPost } from "../types";
 import { fetchComments } from "../data/fetch-comments";
+import { FaEdit } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
 
 export function PostDetail() {
   const params = useParams();
@@ -52,9 +54,17 @@ function Post({
       setCommentButtonText("Show Comments");
     } else {
       setIsCommentVisible(true);
-      console.log(isCommentVisible);
       setCommentButtonText("Hide Comments");
     }
+  };
+
+  const handleDeleteCommentClicked = (commentId: number) => {
+    const filteredComments = comments.filter(
+      (comment) => comment.id !== commentId
+    );
+    setComments(filteredComments);
+    console.log("Deleted commentId: ", commentId);
+    console.log(filteredComments);
   };
 
   return (
@@ -132,8 +142,30 @@ function Post({
           {comments.map((comment) => {
             return (
               <div key={comment.id}>
-                <h4>{comment.email}</h4>
-                <p>{comment.body}</p>
+                <h4>
+                  {comment.id}. {comment.email}
+                </h4>
+                <div
+                  style={{
+                    display: "flex",
+                    padding: "15px",
+                  }}
+                >
+                  <p>{comment.body}</p>
+                  <div
+                    style={{
+                      display: "flex",
+                      fontSize: "20px",
+                    }}
+                  >
+                    <FaEdit />
+                    <MdDelete
+                      onClick={() => {
+                        handleDeleteCommentClicked(comment.id);
+                      }}
+                    />
+                  </div>
+                </div>
               </div>
             );
           })}
