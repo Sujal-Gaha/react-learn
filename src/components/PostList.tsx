@@ -67,6 +67,7 @@ export function PostList() {
       <div
         style={{
           display: "flex",
+          justifyContent: "center",
           gap: "5px",
         }}
       >
