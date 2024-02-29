@@ -99,7 +99,7 @@ export function PostList() {
           id="per_page"
           value={perPage}
           onChange={(event) => {
-            setPerPage(Number(event.target.value));
+            setPerPage(parseInt(event.target.value));
             setPage(1);
           }}
         >
