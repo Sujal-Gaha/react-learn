@@ -13,7 +13,7 @@ export function PostDetail() {
     return <Post postId={postId} post={post} setPost={setPost} />;
   }
 
-  return <div>Post id not found</ div>;
+  return <div>Post id not found</div>;
 }
 
 function Post({
@@ -26,6 +26,8 @@ function Post({
   postId: number;
 }) {
   const [comments, setComments] = useState<TComment[]>([]);
+  const [isCommentVisible, setIsCommentVisible] = useState(false);
+  const [commentButtonText, setCommentButtonText] = useState("Show Comments");
 
   useEffect(() => {
     async function fetchPost() {
@@ -44,6 +46,17 @@ function Post({
     fetchCommentsFn();
   }, [postId]);
 
+  const handleCommentButtonClick = () => {
+    if (isCommentVisible) {
+      setIsCommentVisible(false);
+      setCommentButtonText("Show Comments");
+    } else {
+      setIsCommentVisible(true);
+      console.log(isCommentVisible);
+      setCommentButtonText("Hide Comments");
+    }
+  };
+
   return (
     <div
       style={{
@@ -61,7 +74,7 @@ function Post({
       <h2
         style={{
           fontWeight: "bold",
-          color: "lightpink",
+          color: "darkorange",
           padding: "10px 25px",
         }}
       >
@@ -98,18 +111,34 @@ function Post({
           margin: "20px 25px 25px",
         }}
       />
-      <div>
-        <h3>Comments</h3>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "right",
+        }}
+      >
+        <button
+          onClick={() => {
+            handleCommentButtonClick();
+          }}
+        >
+          {commentButtonText}
+        </button>
+      </div>
+      {isCommentVisible ? (
+        <div>
+          <h3>Comments</h3>
 
-        {comments.map((comment) => {
-          return (
-            <div key={comment.id}>
-              <h4>{comment.email}</h4>
-              <p>{comment.body}</p>
-            </div>
-          );
-        })}
-    </div>
+          {comments.map((comment) => {
+            return (
+              <div key={comment.id}>
+                <h4>{comment.email}</h4>
+                <p>{comment.body}</p>
+              </div>
+            );
+          })}
+        </div>
+      ) : null}
     </div>
   );
 }
