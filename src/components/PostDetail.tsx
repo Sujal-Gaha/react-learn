@@ -30,6 +30,7 @@ function Post({
   const [comments, setComments] = useState<TComment[]>([]);
   const [isCommentVisible, setIsCommentVisible] = useState(false);
   const [commentButtonText, setCommentButtonText] = useState("Show Comments");
+  const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
 
   useEffect(() => {
     async function fetchPost() {
@@ -38,7 +39,7 @@ function Post({
       setPost(result);
     }
     fetchPost();
-  }, [postId, setPost]);
+  }, []);
 
   useEffect(() => {
     async function fetchCommentsFn() {
@@ -46,7 +47,7 @@ function Post({
       setComments(comments);
     }
     fetchCommentsFn();
-  }, [postId]);
+  }, []);
 
   const handleCommentButtonClick = () => {
     if (isCommentVisible) {
@@ -158,7 +159,11 @@ function Post({
                       fontSize: "20px",
                     }}
                   >
-                    <FaEdit />
+                    <FaEdit
+                      onClick={() => {
+                        setIsCommentModalOpen(true);
+                      }}
+                    />
                     <MdDelete
                       onClick={() => {
                         handleCommentDelete(comment.id);
@@ -169,6 +174,31 @@ function Post({
               </div>
             );
           })}
+        </div>
+      ) : null}
+      {isCommentModalOpen ? (
+        <div
+          style={{
+            position: "fixed",
+            left: "50%",
+            top: "50%",
+            transform: "translate(-50%, -50%)",
+            backgroundColor: "darkgray",
+            height: "500px",
+            width: "600px",
+            border: "1px solid black",
+            borderRadius: "4px",
+            textAlign: "center",
+          }}
+        >
+          <h1>This is the Comment Modal</h1>
+          <button
+            onClick={() => {
+              setIsCommentModalOpen(false);
+            }}
+          >
+            Close Modal
+          </button>
         </div>
       ) : null}
     </div>
