@@ -5,6 +5,7 @@ import { TComment, TPost } from "../types";
 import { fetchComments } from "../data/fetch-comments";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
+import { IoIosCloseCircle } from "react-icons/io";
 
 export function PostDetail() {
   const params = useParams();
@@ -31,6 +32,7 @@ function Post({
   const [isCommentVisible, setIsCommentVisible] = useState(false);
   const [commentButtonText, setCommentButtonText] = useState("Show Comments");
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
+  const [selectedComment, setSelectedComment] = useState<TComment | null>(null);
 
   useEffect(() => {
     async function fetchPost() {
@@ -68,6 +70,32 @@ function Post({
     console.log(filteredComments);
   };
 
+  const handleCommentChange = (updatedComment: string) => {
+    setSelectedComment((prevValue) => {
+      if (prevValue) {
+        return {
+          ...prevValue,
+          body: updatedComment,
+        };
+      } else {
+        return prevValue;
+      }
+    });
+  };
+
+  const handleFormSubmission = () => {
+    const updatedComment = comments.map((comment) => {
+      if (comment.id === selectedComment?.id) {
+        return selectedComment;
+      } else {
+        return comment;
+      }
+    });
+
+    setComments(updatedComment);
+    setIsCommentModalOpen(false);
+  };
+
   return (
     <div
       style={{
@@ -79,7 +107,7 @@ function Post({
         backgroundColor: "lightgray",
         margin: "60px auto",
         width: "50%",
-        padding: "0 80px",
+        padding: "20px 80px",
       }}
     >
       <h2
@@ -98,24 +126,25 @@ function Post({
           color: "darkorchid",
         }}
       >
-        {post?.title}
+        Title: {post?.title}
       </h1>
       <p
         style={{
-          textAlign: "center",
-          padding: "28px 0",
+          textAlign: "left",
+          padding: "28px",
         }}
       >
+        <span style={{ fontWeight: "bolder" }}>Body: </span>
         {post?.body}
       </p>
       <p
         style={{
           textAlign: "end",
           paddingRight: "25px",
-          color: "violet",
+          color: "darkviolet",
         }}
       >
-        <u>---Posted by userId: {post?.userId}</u>
+        <u>----Posted by userId: {post?.userId}</u>
       </p>
       <hr
         style={{
@@ -129,6 +158,10 @@ function Post({
         }}
       >
         <button
+          style={{
+            cursor: "pointer",
+            margin: "22px",
+          }}
           onClick={() => {
             handleCommentButtonClick();
           }}
@@ -138,7 +171,13 @@ function Post({
       </div>
       {isCommentVisible ? (
         <div>
-          <h3>Comments</h3>
+          <h3
+            style={{
+              paddingBottom: "10px",
+            }}
+          >
+            Comments
+          </h3>
 
           {comments.map((comment) => {
             return (
@@ -149,7 +188,8 @@ function Post({
                 <div
                   style={{
                     display: "flex",
-                    padding: "15px",
+                    justifyContent: "space-between",
+                    padding: "15px 36px",
                   }}
                 >
                   <p>{comment.body}</p>
@@ -160,11 +200,26 @@ function Post({
                     }}
                   >
                     <FaEdit
+                      style={{
+                        cursor: "pointer",
+                        color: "darkmagenta",
+                      }}
                       onClick={() => {
                         setIsCommentModalOpen(true);
+                        setSelectedComment({
+                          body: comment.body,
+                          postId: comment.postId,
+                          id: comment.id,
+                          email: comment.email,
+                          name: comment.name,
+                        });
                       }}
                     />
                     <MdDelete
+                      style={{
+                        cursor: "pointer",
+                        color: "purple",
+                      }}
                       onClick={() => {
                         handleCommentDelete(comment.id);
                       }}
@@ -184,21 +239,101 @@ function Post({
             top: "50%",
             transform: "translate(-50%, -50%)",
             backgroundColor: "darkgray",
-            height: "500px",
-            width: "600px",
+            height: "450px",
+            width: "850px",
             border: "1px solid black",
-            borderRadius: "4px",
+            borderRadius: "12px",
             textAlign: "center",
           }}
         >
-          <h1>This is the Comment Modal</h1>
-          <button
+          <IoIosCloseCircle
+            style={{
+              float: "right",
+              margin: "-2px",
+              fontSize: "25px",
+              color: "darkmagenta",
+              cursor: "pointer",
+            }}
             onClick={() => {
               setIsCommentModalOpen(false);
             }}
+          />
+          <h3
+            style={{
+              padding: "20px 20px 0",
+              color: "purple",
+            }}
           >
-            Close Modal
-          </button>
+            Edit the comment
+          </h3>
+          <p
+            style={{
+              textAlign: "right",
+              paddingRight: "125px",
+              color: "white",
+            }}
+          >
+            Post Id: {selectedComment?.postId}
+          </p>
+          <hr />
+          <div
+            style={{
+              textAlign: "left",
+              padding: "40px 120px",
+              color: "darkmagenta",
+              fontWeight: "lighter",
+            }}
+          >
+            <h2>Id: {selectedComment?.id}</h2>
+            <h2>Commented by: {selectedComment?.email}</h2>
+          </div>
+          <form
+            action=""
+            style={{
+              padding: "15px 90px",
+              textAlign: "center",
+            }}
+            onSubmit={(event) => {
+              event.preventDefault();
+              handleFormSubmission();
+            }}
+          >
+            <label
+              htmlFor="body"
+              style={{
+                paddingLeft: "33px",
+                float: "left",
+                marginBottom: "5px",
+                fontWeight: "bolder",
+              }}
+            >
+              Enter the new comment here:
+            </label>
+            <br />
+            <input
+              type="text"
+              id="body"
+              value={selectedComment?.body}
+              style={{
+                width: "90%",
+                height: "30px",
+              }}
+              onChange={(event) => {
+                const comment = event.target.value;
+                handleCommentChange(comment);
+              }}
+            />
+            <button
+              style={{
+                margin: "35px 0",
+                width: "90%",
+                backgroundColor: "springgreen",
+                cursor: "pointer",
+              }}
+            >
+              Update
+            </button>
+          </form>
         </div>
       ) : null}
     </div>
