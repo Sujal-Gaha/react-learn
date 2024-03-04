@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getPostById } from "../data/fetch-post-by-id";
-import { TComment, TPost } from "../types";
+import { TPost } from "../types";
 import { fetchComments } from "../data/fetch-comments";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { IoIosCloseCircle } from "react-icons/io";
+import { PostDetailProvider, usePostDetailCtx } from "../store/detail-post";
 
 export function PostDetail() {
   const params = useParams();
@@ -13,7 +14,11 @@ export function PostDetail() {
   const [post, setPost] = useState<TPost | null>(null);
 
   if (postId) {
-    return <Post postId={postId} post={post} setPost={setPost} />;
+    return (
+      <PostDetailProvider>
+        <Post postId={postId} post={post} setPost={setPost} />;
+      </PostDetailProvider>
+    );
   }
 
   return <div>Post id not found</div>;
@@ -28,11 +33,22 @@ function Post({
   setPost: React.Dispatch<React.SetStateAction<TPost | null>>;
   postId: number;
 }) {
-  const [comments, setComments] = useState<TComment[]>([]);
-  const [isCommentVisible, setIsCommentVisible] = useState(false);
-  const [commentButtonText, setCommentButtonText] = useState("Show Comments");
-  const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
-  const [selectedComment, setSelectedComment] = useState<TComment | null>(null);
+  // const [comments, setComments] = useState<TComment[]>([]);
+  // const [isCommentVisible, setIsCommentVisible] = useState(false);
+  // const [commentButtonText, setCommentButtonText] = useState("Show Comments");
+  // const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
+  // const [selectedComment, setSelectedComment] = useState<TComment | null>(null);
+  const ctxOutput = usePostDetailCtx();
+  const comments = ctxOutput.comments;
+  const setComments = ctxOutput.setComments;
+  const isCommentVisible = ctxOutput.isCommentVisible;
+  const setIsCommentVisible = ctxOutput.setIsCommentVisible;
+  const commentButtonText = ctxOutput.commentButtonText;
+  const setCommentButtonText = ctxOutput.setCommentButtonText;
+  const isCommentModalOpen = ctxOutput.isCommentModalOpen;
+  const setIsCommentModalOpen = ctxOutput.setIsCommentModalOpen;
+  const selectedComment = ctxOutput.selectedComment;
+  const setSelectedComment = ctxOutput.setSelectedComment;
 
   useEffect(() => {
     async function fetchPost() {
